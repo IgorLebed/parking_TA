@@ -11,11 +11,8 @@ Input:
  the farther the parking space in the parking section should be located from the highway) THIS CAN BE A DIFFERENT VALUE
 
 """
-
 from distutils.log import error
-from math import fabs
 from random import random
-from re import search
 import numpy as np
 from time import sleep
 import random
@@ -156,51 +153,74 @@ class Parking:
         else:
             print("False")
     
-    def sort_alg(self, matrix):
-        print("sort_alg")
+    def sort_alg(self, matrix, row_count, column_count):
+        print("sort_alg!!!!!")
         row_size = len(matrix[:,1])
         column_size = len(matrix[1,:])
-
-        for row in range(0, row_size -1 ):
-            for column in range(0, column_size - 1):
+        print("count!!!!:", row_count)
+        for row in range(row_count,row_size):
+            print("row !!!!:", row)
+            for column in range(column_count, column_size):
                 matrix[row][column]
-                return row, column
+                print("row and column!!!!!:", row, column)
+
+            return row, column
 
     def search_point(self, matrix, h_cell, w_cell, y_front, y_rear):
         #This function search key parking point with "some" algorithm 
         #TODO Rewrite this method
         print("Search!")
-        
-        column = 0
-        row = 0 
+        row_x = 0 
+        column_y = 0
         search_place = True
         find_place = False
-        A = matrix
-        print(A)
-        
+        #A = matrix
+        #print(A)
+        while_count = 0
+
         while search_place == True:    
             
             #random input test
+            print("search while...")
+            #sleep(1)
+
             #row_size = len(matrix[:,1])
             #column_size = len(matrix[1,:])   
             #column = random.randint(0, (column_size - 1))
             #row = random.randint(0, (row_size-1))
             
             #hand input test
-            #column = int(input("Enter column: "))
-            #row = int(input("Enter row: "))
-            row = self.sort_alg(matrix)
-            column = self.sort_alg(matrix)
-            print("column generate", column)
-            print("row generete", row)
+            #column_ = int(input("Enter column: "))
+            #row_ = int(input("Enter row: "))
             
-            row_ = row[0] #not needed in the future
-            column_ = column[1] #not needed in the future
+            #new method
+            #row = self.sort_alg(matrix, while_count, 0)
+            #column = self.sort_alg(matrix, while_count, 0)
             
-            global matrix_old 
+            print("sort_alg")
+            row_size = len(matrix[:,1])
+            column_size = len(matrix[1,:])
+
+            print("count:", while_count)
+            
+            if(column_y == 20):
+                row_x += 1
+                column_y = 0
+            row_x = row_x
+            column_y += 1
+            
+
+            row_ = row_x #not needed in the future
+            column_ = column_y #not needed in the future
+            print("row",row_)
+            print("column", column_)
+            
+            #global matrix_old 
             matrix_old = self.change_car_parking_place(column_, row_, 1, matrix)
-            global matrix_new
+            #global matrix_new
             matrix_new = []
+
+            check_sector = True
 
             x = - int((h_cell/2)+ y_front) # for h8 = 2
             y =   int((h_cell/2) + (y_rear/2)) #maybe not right = -1 
@@ -208,49 +228,57 @@ class Parking:
                 row_size = len(matrix[:,1])
                 column_size = len(matrix[1,:]) 
                 row = row_ - y
+                print("row:", row)
+                print("row_size:", row_size -1)
                 if row <= (row_size -1):
                     for x in range(int(-w_cell/2), int(w_cell/2)+1):
                         column = column_ - (x)
-                        if column <= (column_size - 1) and column > 0 and row <= (row_size - 1) and row > 0: 
-                            print("matrix:", matrix)
-                            print("row", row)
-                            print("column:",column)
-                            print("value of this point: ", matrix[row][column])
+                        if column <= (column_size - 1) and column >= 0 and row <= (row_size - 1) and row >= 0: 
                             if matrix[row][column] == 2:
                                 find_place = False
                                 search_place = False
-                                return matrix
-                            elif column == column_ and row == row_:
+                                check_sector = False
+                                #return matrix
+                                matrix_new = matrix                           
+                                break
+                            elif column == column_ and row == row_ and check_sector == True:
                                 matrix_new = self.change_car_parking_place(column, row, 1, matrix_old)
                                 matrix_old = matrix_new
                                 find_place = True
-                            else:
-                                #print('befor',matrix_new[column][row])
+                            elif check_sector == True:
                                 matrix_new = self.change_car_parking_place(column, row, 2, matrix_old)
-                                #print('after',matrix_new[column][row])
                                 matrix_old = matrix_new
                                 find_place = True
                         else: 
                             print("Bad range column in 'def search_point'!")
-                            search_place = False
+                            #search_place = False
                             find_place = False
+                            check_sector = False
                             break
                 else: 
                     print("Bad range row in 'def search_point'!")
-                    print("row:", row)
-                    print("row_size: ", row_size)
-                    search_place = False
+                    #search_place = False
                     find_place = False
                     break
 
-                search_place = False
+                if find_place == True:
+                    print("Place found!")
+                    search_place = False
+                elif find_place == False and search_place == False:
+                    print("Place not found in while 1")
+                    search_place = True
+                    matrix_old = matrix
+                else:
+                    print("Place not found in while 2")
+                    search_place = True   
+            while_count += 1
 
         if(find_place == True):
-            print("Found a place")
+            print("Found a place in def search_place")
             self.view_matrix(matrix_new)
             return matrix_new
         else:
-            print("No place found")
+            print("No place found in def search_place")
             matrix_new = matrix
             self.view_matrix(matrix_new)
             return matrix_new
@@ -259,16 +287,9 @@ class Parking:
 
         print("add_car_parking_place_0")
         find_cell = self.find_min_distance_cell(h_car, w_car)
-        #print("add_car_parking_place_2")
-        #print("find cell and find cell: ", find_cell[0], "and", find_cell[1])
 
         cell = self.matrix_filling(find_cell[0], find_cell[1])
-        #print("add_car_parking_place_3")
-        #print("cell and cell: ", cell[0], "and", cell[1])
 
-        #center_point = [column_, row_]
-        #print("add_car_parking_place_1")
-        #print("h_car and w_car: ", h_car, "and", w_car)
         center_point = self.search_point(matrix_, cell[0], cell[1], front, rear)
         result = center_point
         #result = self.filling(center_point, matrix_, cell[0], cell[1], front, rear)
@@ -290,6 +311,9 @@ class Parking:
         test = "vertical_placement"
         print(test)
 """
+
+
+#TODO m ake a mathod
 front_wheel = 1
 rear_wheel = -2  
 time = 10       #not use

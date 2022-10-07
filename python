@@ -1,0 +1,8 @@
+from time import sleep
+
+print("hello world")
+for x in range(0, 20):
+    
+    for y in (range(0, 20)):
+        print("x and y", x, y)
+        sleep(1)
