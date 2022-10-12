@@ -11,15 +11,12 @@ Input:
  the farther the parking space in the parking section should be located from the highway) THIS CAN BE A DIFFERENT VALUE
 
 """
-
 from distutils.log import error
-from math import fabs
-from random import random
-from re import search
 import numpy as np
 from time import sleep
 import random
 
+#TODO check the logic, remove unnecessary variables or rename everything in the same style
 print("Parkin module start")
 
 class Parking:
@@ -156,51 +153,75 @@ class Parking:
         else:
             print("False")
     
-    def sort_alg(self, matrix):
-        print("sort_alg")
-        row_size = len(matrix[:,1])
-        column_size = len(matrix[1,:])
+    def search_alg(self, row_x, column_y, waiting_time):
+        print("search_alg!!!!!")
 
-        for row in range(0, row_size -1 ):
-            for column in range(0, column_size - 1):
-                matrix[row][column]
-                return row, column
+        #TODO need to make a time dependency
+        if waiting_time>240 and waiting_time < 600: #time in minute
+            print("long parking time")
+        elif waiting_time <240 and waiting_time > 0:
+            print("short parking time")   
+            print("Time", waiting_time)
+            if(column_y == 20):
+                    row_x += 1
+                    column_y = 0
+            row_x = row_x
+            column_y += 1
 
-    def search_point(self, matrix, h_cell, w_cell, y_front, y_rear):
+            return row_x, column_y
+        else:
+            print("oh oh something went wrong in def search alg")
+
+    def check_point(self, matrix, h_cell, w_cell, y_front, y_rear):
         #This function search key parking point with "some" algorithm 
         #TODO Rewrite this method
         print("Search!")
-        
-        column = 0
-        row = 0 
-        search_place = True
+
+        row_x = 0 
+        column_y = 0
+
+        check_place = True
         find_place = False
-        A = matrix
-        print(A)
         
-        while search_place == True:    
-            
+        while check_place == True:    
+            print("check while...")
+
             #random input test
+            #sleep(1)
+
             #row_size = len(matrix[:,1])
             #column_size = len(matrix[1,:])   
             #column = random.randint(0, (column_size - 1))
             #row = random.randint(0, (row_size-1))
-            
+
             #hand input test
-            #column = int(input("Enter column: "))
-            #row = int(input("Enter row: "))
-            row = self.sort_alg(matrix)
-            column = self.sort_alg(matrix)
-            print("column generate", column)
-            print("row generete", row)
-            
-            row_ = row[0] #not needed in the future
-            column_ = column[1] #not needed in the future
-            
-            global matrix_old 
+            #column_ = int(input("Enter column: "))
+            #row_ = int(input("Enter row: "))
+
+            #new method
+            #row = self.sort_alg(matrix, while_count, 0)
+            #column = self.sort_alg(matrix, while_count, 0)
+
+            print("search_alg")
+            row_x = self.search_alg(row_x, column_y, 10)[0]      #3d argument need add link
+            column_y = self.search_alg(row_x, column_y, 10 )[1]
+            #if(column_y == 20):
+            #    row_x += 1
+            #    column_y = 0
+            #row_x = row_x
+            #column_y += 1
+
+            row_ = row_x #not needed in the future
+            column_ = column_y #not needed in the future
+            print("row",row_)
+            print("column", column_)
+
+            #global matrix_old 
             matrix_old = self.change_car_parking_place(column_, row_, 1, matrix)
-            global matrix_new
+            #global matrix_new
             matrix_new = []
+
+            check_sector = True
 
             x = - int((h_cell/2)+ y_front) # for h8 = 2
             y =   int((h_cell/2) + (y_rear/2)) #maybe not right = -1 
@@ -208,76 +229,127 @@ class Parking:
                 row_size = len(matrix[:,1])
                 column_size = len(matrix[1,:]) 
                 row = row_ - y
+                print("row:", row)
+                print("row_size:", row_size -1)
                 if row <= (row_size -1):
                     for x in range(int(-w_cell/2), int(w_cell/2)+1):
                         column = column_ - (x)
-                        if column <= (column_size - 1) and column > 0 and row <= (row_size - 1) and row > 0: 
-                            print("matrix:", matrix)
-                            print("row", row)
-                            print("column:",column)
-                            print("value of this point: ", matrix[row][column])
+                        if column <= (column_size - 1) and column >= 0 and row <= (row_size - 1) and row >= 0: 
                             if matrix[row][column] == 2:
                                 find_place = False
-                                search_place = False
-                                return matrix
-                            elif column == column_ and row == row_:
+                                check_place = False
+                                check_sector = False
+                                #return matrix
+                                matrix_new = matrix                           
+                                break
+                            elif column == column_ and row == row_ and check_sector == True:
                                 matrix_new = self.change_car_parking_place(column, row, 1, matrix_old)
                                 matrix_old = matrix_new
                                 find_place = True
-                            else:
-                                #print('befor',matrix_new[column][row])
+                            elif check_sector == True:
                                 matrix_new = self.change_car_parking_place(column, row, 2, matrix_old)
-                                #print('after',matrix_new[column][row])
                                 matrix_old = matrix_new
                                 find_place = True
                         else: 
-                            print("Bad range column in 'def search_point'!")
-                            search_place = False
+                            print("Bad range column in 'def check_point'!")
+                            #check_place = False
                             find_place = False
+                            check_sector = False
                             break
                 else: 
-                    print("Bad range row in 'def search_point'!")
-                    print("row:", row)
-                    print("row_size: ", row_size)
-                    search_place = False
+                    print("Bad range row in 'def check_point'!")
+                    #check_place = False
                     find_place = False
                     break
 
-                search_place = False
-
+                if find_place == True:
+                    print("Place found!")
+                    check_place = False
+                elif find_place == False and check_place == False:
+                    print("Place not found in while 1")
+                    check_place = True
+                    matrix_old = matrix
+                else:
+                    print("Place not found in while 2")
+                    check_place = True   
+            
         if(find_place == True):
-            print("Found a place")
+            print("Found a place in def check_place")
             self.view_matrix(matrix_new)
             return matrix_new
         else:
-            print("No place found")
+            print("No place found in def check_place")
             matrix_new = matrix
             self.view_matrix(matrix_new)
             return matrix_new
 
-    def add_car_parking_place(self, matrix_, h_car, w_car, front, rear):
+    def add_car_parking_place(self, matrix_, h_car, w_car, front, rear, waiting_time):
 
         print("add_car_parking_place_0")
         find_cell = self.find_min_distance_cell(h_car, w_car)
-        #print("add_car_parking_place_2")
-        #print("find cell and find cell: ", find_cell[0], "and", find_cell[1])
 
         cell = self.matrix_filling(find_cell[0], find_cell[1])
-        #print("add_car_parking_place_3")
-        #print("cell and cell: ", cell[0], "and", cell[1])
 
-        #center_point = [column_, row_]
-        #print("add_car_parking_place_1")
-        #print("h_car and w_car: ", h_car, "and", w_car)
-        center_point = self.search_point(matrix_, cell[0], cell[1], front, rear)
+        center_point = self.check_point(matrix_, cell[0], cell[1], front, rear, )
         result = center_point
         #result = self.filling(center_point, matrix_, cell[0], cell[1], front, rear)
-
+ 
         return result
 
     def remove_car_parking_place(self, column_, row_):
         self.change_car_parking_place(column_, row_, 0)
-"""
+    
+    def menu(self):
+        print("Hello in menu of parking task allokation")
+        #TODO make a mathod
+        front_wheel = 1
+        rear_wheel = -2  
+        time = 10       #not use
+
+        matrix = []
+        new_matrix = []
+
+        continue_work = True
+        while continue_work == True:
+            print("Input 1 to add car on parkin place")
+            print("Input 2 to delete car from parkin place")
+            print("Input 3 to matrix")
+            print("Input 4 to end this program")
+            menu_button = int(input())
+
+            if menu_button == int(1): 
+                print("Add car menu")
+                #output = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
+                matrix = np.array(matrix)
+                new_matrix = np.array(new_matrix)
+
+                if matrix.size == 0:
+                    matrix = self.parking_zero_matrix()
+                elif new_matrix.size == 0 and matrix.size != 0:
+                    new_matrix = matrix
+                else:
+                    matrix = new_matrix 
+
+                new_matrix = self.add_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, time)
+                
+            elif menu_button == int(2):
+                print("Delete car menu")
+                new_matrix = np.array(new_matrix)
+                if np.sum(new_matrix) == 0 or new_matrix.size == 0:
+                    print("Matrix is empty!")
+                else:
+                    print("Matrix is't empty")
+                    print("Enter place with car")
+            elif menu_button == int(3): 
+                print("Matrix: ", matrix)
+                print("New_matrix: ", new_matrix)
+                
+            elif menu_button == int(4): 
+                print("Thanks for using this program")
+                print("Program is exit")
+                continue_work = False
+    """
+    #TODO car dimensions is been in def min size or soth like this method, check and rename
     def car_dimensions(self, hight, wight, front_wheel, rear_wheel):
         test = "car_dimensions"
         print(test)
@@ -289,50 +361,12 @@ class Parking:
     def vertical_placement(self, matrix_A):
         test = "vertical_placement"
         print(test)
-"""
+    """
+
 front_wheel = 1
 rear_wheel = -2  
-time = 10       #not use
+time = 10
 
-matrix = []
-new_matrix = []
+parking_ta = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
 
-continue_work = True
-while continue_work == True:
-    print("Input 1 to add car on parkin place")
-    print("Input 2 to delete car from parkin place")
-    print("Input 3 to matrix")
-    print("Input 4 to end this program")
-    menu_button = int(input())
-
-    if menu_button == int(1): 
-        print("Add car menu")
-        output = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
-        matrix = np.array(matrix)
-        new_matrix = np.array(new_matrix)
-
-        if matrix.size == 0:
-            matrix = output.parking_zero_matrix()
-        elif new_matrix.size == 0 and matrix.size != 0:
-            new_matrix = matrix
-        else:
-            matrix = new_matrix 
-
-        new_matrix = output.add_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel)
-        
-    elif menu_button == int(2):
-        print("Delete car menu")
-        new_matrix = np.array(new_matrix)
-        if np.sum(new_matrix) == 0 or new_matrix.size == 0:
-            print("Matrix is empty!")
-        else:
-            print("Matrix is't empty")
-            print("Enter place with car")
-    elif menu_button == int(3): 
-        print("Matrix: ", matrix)
-        print("New_matrix: ", new_matrix)
-        
-    elif menu_button == int(4): 
-        print("Thanks for using this program")
-        print("Program is exit")
-        continue_work = False
+parking_ta.menu()
