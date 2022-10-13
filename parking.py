@@ -281,8 +281,6 @@ class Parking:
        
         return result
 
-
-
     def filling_del(self, matrix, h_cell, w_cell, y_front, y_rear, column_, row_):
         print("filinig_del")
 
@@ -356,12 +354,6 @@ class Parking:
             self.view_matrix(matrix_new)
             return matrix_new
 
-
-
-    def remove_car_parking_place(self, column_, row_):
-        print("remove_car_parking_place")
-        self.change_car_parking_place(column_, row_, 0)
-
     def menu(self):
         print("Hello in menu of parking task allokation")
         #TODO make a mathod
@@ -410,8 +402,10 @@ class Parking:
                     new_matrix = self.del_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, column, row) #TODO h_car and w_car auto input 
 
             elif menu_button == int(3): 
-                print("Matrix: ", matrix)
-                print("New_matrix: ", new_matrix)
+                print("Matrix: ")
+                print(matrix)
+                print("New_matrix: ")
+                print(new_matrix)
                 
             elif menu_button == int(4): 
                 print("Thanks for using this program")
