@@ -316,7 +316,7 @@ class Parking:
                                 matrix_new = matrix                           
                                 break
                             elif column == column_ and row == row_ and check_sector == True:
-                                matrix_new = self.change_car_parking_place(column, row, 1, matrix_old)
+                                matrix_new = self.change_car_parking_place(column, row, 2, matrix_old)
                                 matrix_old = matrix_new
                                 find_place = True
                             elif check_sector == True:
@@ -392,13 +392,12 @@ class Parking:
                 new_matrix = np.array(new_matrix)
                 if np.sum(new_matrix) == 0 or new_matrix.size == 0:
                     print("Matrix is empty!")
-
                 else:
                     print("Matrix is't empty")
                     print("Enter place with car")
                     column = int(input("Enter column:"))
                     row = int(input("Enter row:"))
-
+                    matrix = new_matrix
                     new_matrix = self.del_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, column, row) #TODO h_car and w_car auto input 
 
             elif menu_button == int(3): 
@@ -413,11 +412,6 @@ class Parking:
                 continue_work = False
     
     """
-    #TODO car dimensions is been in def min size or soth like this method, check and rename
-    def car_dimensions(self, hight, wight, front_wheel, rear_wheel):
-        test = "car_dimensions"
-        print(test)
-
     def horizontal_placement(self, matrix_A):
         test = "horizontal_placement"
         print(test)
