@@ -309,18 +309,12 @@ class Parking:
                     for x in range(int(-w_cell/2), int(w_cell/2)+1):
                         column = column_ - (x)
                         if column <= (column_size - 1) and column >= 0 and row <= (row_size - 1) and row >= 0: 
-                            if matrix[row][column] == 2:
-                                find_place = False
-                                check_place = False
-                                check_sector = False
-                                matrix_new = matrix                           
-                                break
-                            elif column == column_ and row == row_ and check_sector == True:
-                                matrix_new = self.change_car_parking_place(column, row, 2, matrix_old)
+                            if column == column_ and row == row_ and check_sector == True:
+                                matrix_new = self.change_car_parking_place(column, row, 0, matrix_old)
                                 matrix_old = matrix_new
                                 find_place = True
                             elif check_sector == True:
-                                matrix_new = self.change_car_parking_place(column, row, 2, matrix_old)
+                                matrix_new = self.change_car_parking_place(column, row, 0, matrix_old)
                                 matrix_old = matrix_new
                                 find_place = True
                         else: 
@@ -397,6 +391,7 @@ class Parking:
                     print("Enter place with car")
                     column = int(input("Enter column:"))
                     row = int(input("Enter row:"))
+
                     matrix = new_matrix
                     new_matrix = self.del_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, column, row) #TODO h_car and w_car auto input 
 
