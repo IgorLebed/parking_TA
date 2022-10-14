@@ -280,6 +280,7 @@ class Parking:
             center_point = self.filling_del(matrix_, cell[0], cell[1], front, rear, input_column, input_row)
             result = center_point
             return result
+        
         else:
             print("Unright column and row!")
             return matrix_
@@ -347,6 +348,7 @@ class Parking:
             print("Found a place in def check_place")
             self.view_matrix(matrix_new)
             return matrix_new
+
         else:
             print("No place found in def check_place")
             matrix_new = matrix
