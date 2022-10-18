@@ -1,5 +1,4 @@
 """
-
 This program module has the following test data set
 Input:
 • i - number of parking sections UNTIL i=1
@@ -9,7 +8,6 @@ Input:
 • y_front, y_rear - the coordinate of the center point between the front and rear wheels CAN BE CALCULATED HERE
 • t - the time of placing the PBX in the parking lot (we will assume that the more time the PBX should be located in the parking lot,
  the farther the parking space in the parking section should be located from the highway) THIS CAN BE A DIFFERENT VALUE
-
 """
 from distutils.log import error
 import numpy as np
@@ -17,6 +15,7 @@ from time import sleep
 import random
 
 #TODO check the logic, remove unnecessary variables or rename everything in the same style
+#TODO add save and open parking place def 
 print("Parkin module start")
 
 class Parking:
@@ -412,20 +411,6 @@ class Parking:
                 print("Thanks for using this program")
                 print("Program is exit")
                 continue_work = False
-    
-    """
-    def horizontal_placement(self, matrix_A):
-        test = "horizontal_placement"
-        print(test)
-    def vertical_placement(self, matrix_A):
-        test = "vertical_placement"
-        print(test)
-
-    def safe_matrix_to_txt(self):
-        print("Safe def")
-    def open_matrix_from_txt(self):
-        print("Open matrix")
-    """
 
 front_wheel = 1
 rear_wheel = -2  
