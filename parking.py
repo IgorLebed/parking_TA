@@ -229,13 +229,27 @@ class Parking:
         else:
             print("Oh Oh something went wrong in def search alg")
             print("Bad range of waiting time")
+            #return row_x, column_size
+            #This don't work yet
             return 1
 
     def filling_add(self, matrix, h_cell, w_cell, y_front, y_rear, waiting_time):
-        #This function search key parking point with "some" algorithm 
-        #TODO Rewrite this method
+        """
+        Method filling the matrix in the found place. 
+        !!!There is a problem if all the places are filled, it goes into an endless search...
 
-        #print("Search!")
+        Input: matrix (matrix where you want chaged place)
+               h_cell (hight cell)
+               w_cell (width cell)
+               y_front 
+               y_rear
+               waiting_time (waiting time for the car in the parking place)
+        Output: new_matrix (with changes about place)
+        """
+        
+        #This function search key parking point with "some" algorithm 
+        #TODO Rewrite conditions
+        #These conditions are created so that the algorithm starts the search from the beginning or end of the matrix
         if waiting_time > 240 and waiting_time < 600: #time in minute
             print("long parking time")
             row_x = 20
@@ -324,7 +338,18 @@ class Parking:
             return matrix_new
 
     def add_car_parking_place(self, matrix_, h_car, w_car, front, rear, waiting_time):
-        print("add_car_parking_place_0")
+        """
+        The method that combines all preparatory methods for adding a car to a parking place.
+
+        Input: matrix_
+               h_car, w_car
+               front    (center point between 
+               rear     the front and rear wheels)
+               waiting_time (waiting time for the car in the parking place)
+        Output: result (This is new matrix)
+        """
+
+        #print("add_car_parking_place")
         find_cell = self.find_min_distance_cell(h_car, w_car)
 
         cell = self.matrix_filling(find_cell[0], find_cell[1])
@@ -333,10 +358,20 @@ class Parking:
         result = center_point
         #result = self.filling(center_point, matrix_, cell[0], cell[1], front, rear)
         return result
-    
-    def filling_del(self, matrix, h_cell, w_cell, y_front, y_rear, column_, row_):
-        print("filinig_del")
 
+    def filling_del(self, matrix, h_cell, w_cell, y_front, y_rear, column_, row_):
+        """
+        Method filling the matrix for delete car from parking place.
+
+        Input: matrix (matrix where you want chaged place)
+               h_cell (hight cell)
+               w_cell (width cell)
+               y_front
+               column_, row_ (Coordinate in Matrix where car on parking place)
+        Output: new_matrix (Without car)
+        """
+
+        #print("filinig_del")
         check_place = True
         find_place = False
         #while check_place == True:  
@@ -405,7 +440,18 @@ class Parking:
             return matrix_new
 
     def del_car_parking_place(self, matrix_, h_car, w_car, front, rear, input_column, input_row):
-        print("del_car_parking_place_0")
+        """
+        The method that combines all preparatory methods for deleting a car to a parking place.
+
+        Input: matrix_
+               h_car, w_car
+               front    (center point between 
+               rear     the front and rear wheels)
+               column_, row_ (Coordinate in Matrix where car on parking place)
+        Output: new_matrix (without car)
+        """
+        
+        #print("del_car_parking_place")
         find_cell = self.find_min_distance_cell(h_car, w_car)
 
         cell = self.matrix_filling(find_cell[0], find_cell[1])
@@ -420,6 +466,10 @@ class Parking:
             return matrix_
 
     def menu(self):
+        """
+        This is test method for using class parking_TA
+        """
+
         print("Hello in menu of parking task allokation")
         #TODO make a mathod
         front_wheel = 1
