@@ -3,7 +3,7 @@ This program module has the following test data set
 Input:
 • i - number of parking sections UNTIL i=1
 • m_i, n_i - number of rows and columns of nodes of the i-th parking section. LET IT BE 10 ON 20
-• s - step between nodes, m (constant for all sections) LET IT BE 50 cm
+• s - step between nodes, сm (constant for all sections) LET IT BE 50 cm
 • h, w - the height and width of the vehicle to be placed FIRST FOR ONE CAR 4 TO 2 AND SO IN GENERAL DIFFERENT VALUES CAN BE
 • y_front, y_rear - the coordinate of the center point between the front and rear wheels CAN BE CALCULATED HERE
 • t - the time of placing the PBX in the parking lot (we will assume that the more time the PBX should be located in the parking lot,
@@ -34,6 +34,13 @@ class Parking:
                                             # space in the parking section should be located from the highway)'
     
     def parking_zero_matrix(self):
+        """
+        The method creates a zero matrix.
+    
+        Input: it takes the value of the self.column_i and self.row_i defined in the "def __init__()"
+        Output: zero marix "A"
+        """
+       
         row = []
         column = []
         for x in range(self.columns_i):
@@ -46,11 +53,33 @@ class Parking:
         return A
 
     def view_matrix(self, matrix):
+        """
+        The method displays the matrix in a nice form.
+        
+        Input: It takes a matrix.
+        Output: Nothing, only print result 
+        """
+        
         for line in matrix:
             print(*line)
 
     def change_car_parking_place(self, column, row, number, matrix):
+        """
+        This method changes the values in the matrix.
+
+        Input: column, row
+               number (0, 1 or 2)
+               matrix 
+        Output: matrix(A) with new values
+        """
         def matrix_input_check(matrix_a):
+            """
+            The function for matrix validation 
+
+            Input: matrix_a
+            Output: if correct (matrix_a)
+                    else print error  
+            """
             if (number == 0 or number == 1 or number == 2):
                 row_size = len(matrix_a[:,1])
                 column_size = len(matrix_a[1,:])
@@ -76,6 +105,10 @@ class Parking:
             return A
 
     def filling(self, center_point, matrix_, h_cell, w_cell, y_front, y_rear):
+        """
+        The "filling" method is not used in this version.
+        """
+
         print("filinig")
         column_ = center_point[0]
         row_ = center_point[1]
@@ -107,21 +140,43 @@ class Parking:
         return matrix_new
 
     def cell_cm_in_metr(self):
+        """
+        Conversion method cm to m.
+
+        Input: self.step_n from def __init__
+        Output: meter_step
+        """
+
         cm_step = self.step_n 
         meter_step = cm_step / 100
         return meter_step
 
     def find_min_distance_cell(self, h_car, w_car):
+        """
+        The method for calculation of the minimum distance for the car in cells.
+
+        Input: h_car (hight car)
+               w_car (width car)
+        Output: h_cell, w_cell
+        """
+
         cell = self.cell_cm_in_metr()
         h_cell = h_car / cell 
         w_cell = w_car / cell 
-        #print("cell", cell)
-        #print("h ", h_cell)
-        #print("w ", w_cell)
+        
         return h_cell, w_cell
 
     def matrix_filling(self, h_cell, w_cell):
-        print("matrix fillin")
+        """
+        The method for check cell on even value
+
+        Input: h_cell, w_cell
+        Output: if correct h_cell, w_cell
+                else error
+                TODO: add value to cell instead of error
+        """
+
+        print("matrix filling")
         parity_variable = None
         if h_cell %2 == 0 and w_cell %2 == 0:
             print("even value")
@@ -136,11 +191,20 @@ class Parking:
             print("False")
     
     def search_alg(self, row_x, column_y, column_size, waiting_time):
-        print("search_alg!")
+        """
+        The method for search place in matrix for car on time base.
 
+        Input: row, column
+               column_size for check
+               waiting_time
+        Output: row, column
+                or error
+        """
+
+        #print("search_alg!")
         #TODO need to make a time dependency
         if waiting_time > 240 and waiting_time < 600: #time in minute
-            print("long parking time")
+            print("Long parking time")
             print("Time", waiting_time)
             
             if(column_y == 0):
@@ -152,7 +216,7 @@ class Parking:
             return row_x, column_y
 
         elif waiting_time < 240 and waiting_time > 0:
-            print("short parking time")   
+            print("Short parking time")   
             print("Time", waiting_time)
 
             if(column_y == 20):
@@ -165,13 +229,13 @@ class Parking:
         else:
             print("Oh Oh something went wrong in def search alg")
             print("Bad range of waiting time")
-            return row_x, column_size
+            return 1
 
-    def check_point(self, matrix, h_cell, w_cell, y_front, y_rear, waiting_time):
+    def filling_add(self, matrix, h_cell, w_cell, y_front, y_rear, waiting_time):
         #This function search key parking point with "some" algorithm 
         #TODO Rewrite this method
-        print("Search!")
 
+        #print("Search!")
         if waiting_time > 240 and waiting_time < 600: #time in minute
             print("long parking time")
             row_x = 20
@@ -189,11 +253,12 @@ class Parking:
 
             row_size = len(matrix[:,1])
             column_size = len(matrix[1,:])
+            
             #hand input test
             #column_ = int(input("Enter column: "))
             #row_ = int(input("Enter row: "))
-
-            print("search_alg")
+            #print("search_alg")
+            
             row_x = self.search_alg(row_x, column_y, column_size, waiting_time)[0]
             column_y = self.search_alg(row_x, column_y, column_size, waiting_time)[1]
 
@@ -228,12 +293,12 @@ class Parking:
                                 matrix_old = matrix_new
                                 find_place = True
                         else: 
-                            print("Bad range column in 'def check_point'!")
+                            print("Bad range column in 'def filling_add'!")
                             find_place = False
                             check_sector = False
                             break
                 else: 
-                    print("Bad range row in 'def check_point'!")
+                    print("Bad range row in 'def filling_add'!")
                     find_place = False
                     break
 
@@ -264,7 +329,7 @@ class Parking:
 
         cell = self.matrix_filling(find_cell[0], find_cell[1])
 
-        center_point = self.check_point(matrix_, cell[0], cell[1], front, rear, waiting_time)
+        center_point = self.filling_add(matrix_, cell[0], cell[1], front, rear, waiting_time)
         result = center_point
         #result = self.filling(center_point, matrix_, cell[0], cell[1], front, rear)
         return result
@@ -320,12 +385,12 @@ class Parking:
                             matrix_old = matrix_new
                             find_place = True
                     else: 
-                        print("Bad range column in 'def check_point'!")
+                        print("Bad range column in 'def filling_add'!")
                         find_place = False
                         check_sector = False
                         break
             else: 
-                print("Bad range row in 'def check_point'!")
+                print("Bad range row in 'def filling_add'!")
                 find_place = False
                 break
 
