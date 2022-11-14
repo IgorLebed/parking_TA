@@ -489,18 +489,22 @@ class Parking:
 
             if menu_button == int(1):
                 time = int(input("Enter waiting time:"))
-                print("Add car menu")
-                #output = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
-                matrix = np.array(matrix)
-                new_matrix = np.array(new_matrix)
+                
+                if time <= 0:
+                    print("Invalid time less 0 or 0")
+                else:    
+                    print("Add car menu")
+                    #output = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
+                    matrix = np.array(matrix)
+                    new_matrix = np.array(new_matrix)
 
-                if matrix.size == 0:
-                    matrix = self.parking_zero_matrix()
-                elif new_matrix.size == 0 and matrix.size != 0:
-                    new_matrix = matrix
-                else:
-                    matrix = new_matrix 
-                new_matrix = self.add_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, time) #TODO h_car and w_car auto input  
+                    if matrix.size == 0:
+                        matrix = self.parking_zero_matrix()
+                    elif new_matrix.size == 0 and matrix.size != 0:
+                        new_matrix = matrix
+                    else:
+                        matrix = new_matrix 
+                    new_matrix = self.add_car_parking_place(matrix, 3, 2, front_wheel, rear_wheel, time) #TODO h_car and w_car auto input  
 
             elif menu_button == int(2):
                 print("Delete car menu")
