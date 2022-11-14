@@ -253,7 +253,7 @@ class Parking:
 
             row_size = len(matrix[:,1])
             column_size = len(matrix[1,:])
-            
+
             #hand input test
             #column_ = int(input("Enter column: "))
             #row_ = int(input("Enter row: "))
@@ -333,22 +333,7 @@ class Parking:
         result = center_point
         #result = self.filling(center_point, matrix_, cell[0], cell[1], front, rear)
         return result
-
-    def del_car_parking_place(self, matrix_, h_car, w_car, front, rear, input_column, input_row):
-        print("del_car_parking_place_0")
-        find_cell = self.find_min_distance_cell(h_car, w_car)
-
-        cell = self.matrix_filling(find_cell[0], find_cell[1])
-        
-        if matrix_[input_row][input_column] == 1:
-            center_point = self.filling_del(matrix_, cell[0], cell[1], front, rear, input_column, input_row)
-            result = center_point
-            return result
-        
-        else:
-            print("Unright column and row!")
-            return matrix_
-
+    
     def filling_del(self, matrix, h_cell, w_cell, y_front, y_rear, column_, row_):
         print("filinig_del")
 
@@ -418,6 +403,21 @@ class Parking:
             matrix_new = matrix
             self.view_matrix(matrix_new)
             return matrix_new
+
+    def del_car_parking_place(self, matrix_, h_car, w_car, front, rear, input_column, input_row):
+        print("del_car_parking_place_0")
+        find_cell = self.find_min_distance_cell(h_car, w_car)
+
+        cell = self.matrix_filling(find_cell[0], find_cell[1])
+        
+        if matrix_[input_row][input_column] == 1:
+            center_point = self.filling_del(matrix_, cell[0], cell[1], front, rear, input_column, input_row)
+            result = center_point
+            return result
+        
+        else:
+            print("Unright column and row!")
+            return matrix_
 
     def menu(self):
         print("Hello in menu of parking task allokation")
