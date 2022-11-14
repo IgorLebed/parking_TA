@@ -19,7 +19,7 @@ import random
 print("Parkin module start")
 
 class Parking:
-    def __init__(self, i, m_i, n_i, s, h, w, y_front, y_rear, t):
+    def __init__(self, i, m_i, n_i, s, h, w, y_front, y_rear, t, max_t):
         self.number_of_parking = i          #       number of parking sections
         self.row_i = m_i                    #       number of rows and columns of nodes
         self.columns_i = n_i                # of the i-th parking section
@@ -32,6 +32,7 @@ class Parking:
                                             # (we will assume that the more time the PBX should be 
                                             # located in the parking lot, the farther the parking 
                                             # space in the parking section should be located from the highway)'
+        self.max_waiting_time = max_t
     
     def parking_zero_matrix(self):
         """
@@ -203,7 +204,7 @@ class Parking:
 
         #print("search_alg!")
         #TODO need to make a time dependency
-        if waiting_time > 240 and waiting_time < 600: #time in minute
+        if waiting_time > 240 and waiting_time < self.max_waiting_time: #time in minute
             print("Long parking time")
             print("Time", waiting_time)
             
@@ -250,7 +251,7 @@ class Parking:
         #This function search key parking point with "some" algorithm 
         #TODO Rewrite conditions
         #These conditions are created so that the algorithm starts the search from the beginning or end of the matrix
-        if waiting_time > 240 and waiting_time < 600: #time in minute
+        if waiting_time > 240 and waiting_time < self.max_waiting_time: #time in minute
             print("long parking time")
             row_x = 20
             column_y = 20
@@ -491,7 +492,9 @@ class Parking:
                 time = int(input("Enter waiting time:"))
                 
                 if time <= 0:
-                    print("Invalid time less 0 or 0")
+                    print("Invalid time less 0 or 0 min")
+                elif time >= self.max_waiting_time:
+                    print("Invalid time more", self.max_waiting_time, "min")
                 else:    
                     print("Add car menu")
                     #output = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
@@ -534,6 +537,7 @@ class Parking:
 front_wheel = 1
 rear_wheel = -2  
 time = 10
+max_t = 600
 
-parking_ta = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time)
+parking_ta = Parking(1, 20, 20, 50, 4, 2, front_wheel, rear_wheel, time, max_t)
 parking_ta.menu()
